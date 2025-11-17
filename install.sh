@@ -52,6 +52,7 @@ install_jq() {
   sleep 1
   clear
 }
+
 #Check user token
 check_token() {
   echo -e "                                                       "
@@ -63,7 +64,7 @@ check_token() {
   read -r USER_TOKEN
 
   if [ "$USER_TOKEN" = "gudel023" ]; then
-    echo -e "${GREEN}AKSES BERHASIL${NC}}"
+    echo -e "${GREEN}AKSES BERHASIL${NC}"
   else
     echo -e "${GREEN}Buy dulu Gih Ke gudel023${NC}"
     echo -e "${YELLOW}TELEGRAM : @gudel023${NC}"
@@ -92,15 +93,15 @@ install_theme() {
     read -r SELECT_THEME
     case "$SELECT_THEME" in
       1)
-        THEME_URL=$(echo -e "https://github.com/gitfdil1248/thema/raw/main/C2.zip")
+        THEME_URL="https://github.com/gitfdil1248/thema/raw/main/C2.zip"
         break
         ;;
       2)
-        THEME_URL=$(echo -e "\x68\x74\x74\x70\x73\x3A\x2F\x2F\x67\x69\x74\x68\x75\x62\x2E\x63\x6F\x6D\x2F\x44\x49\x54\x5A\x5A\x31\x31\x32\x2F\x66\x6F\x78\x78\x68\x6F\x73\x74\x74\x2F\x72\x61\x77\x2F\x6D\x61\x69\x6E\x2F\x43\x31\x2E\x7A\x69\x70")
+        THEME_URL="https://github.com/DITZZ112/foxxhostt/raw/main/C1.zip"
         break
         ;;
       3)
-        THEME_URL=$(echo -e "https://github.com/gitfdil1248/thema/raw/main/C3.zip")
+        THEME_URL="https://github.com/gitfdil1248/thema/raw/main/C3.zip"
         break
         ;; 
       x)
@@ -112,73 +113,72 @@ install_theme() {
     esac
   done
   
-if [ -e /root/pterodactyl ]; then
+  if [ -e /root/pterodactyl ]; then
     sudo rm -rf /root/pterodactyl
   fi
-  wget -q "$THEME_URL"
-  sudo unzip -o "$(basename "$THEME_URL")"
+  wget -q "$THEME_URL" -O theme.zip
+  sudo unzip -o theme.zip
   
-if [ "$SELECT_THEME" -eq 1 ]; then
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                                   "
-  sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-  sudo apt install -y nodejs
-  sudo npm i -g yarn
-  cd /var/www/pterodactyl
-  yarn add react-feather
-  php artisan migrate
-  yarn build:production
-  php artisan view:clear
-  sudo rm /root/C2.zip
-  sudo rm -rf /root/pterodactyl
+  if [ "$SELECT_THEME" = "1" ]; then
+    echo -e "                                                       "
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "                                                                   "
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt install -y nodejs
+    sudo npm i -g yarn
+    cd /var/www/pterodactyl
+    yarn add react-feather
+    php artisan migrate
+    yarn build:production
+    php artisan view:clear
+    sudo rm theme.zip
+    sudo rm -rf /root/pterodactyl
 
-  echo -e "                                                       "
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e ""
-  sleep 2
-  clear
-  exit 0
+    echo -e "                                                       "
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e ""
+    sleep 2
+    clear
+    exit 0
 
-elif [ "$SELECT_THEME" -eq 2 ]; then
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-  sudo apt install -y nodejs
-  npm i -g yarn
-  cd /var/www/pterodactyl
-  yarn add react-feather
-  php artisan billing:install stable
-  php artisan migrate
-  yarn build:production
-  php artisan view:clear
-  sudo rm /root/C1.zip
-  sudo rm -rf /root/pterodactyl
+  elif [ "$SELECT_THEME" = "2" ]; then
+    echo -e "                                                       "
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "                                                       "
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt install -y nodejs
+    npm i -g yarn
+    cd /var/www/pterodactyl
+    yarn add react-feather
+    php artisan migrate
+    yarn build:production
+    php artisan view:clear
+    sudo rm theme.zip
+    sudo rm -rf /root/pterodactyl
 
-  echo -e "                                                       "
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                  INSTALL SUCCESS                [+]${NC}"
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  sleep 2
-  clear
-  return
+    echo -e "                                                       "
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "${GREEN}[+]                  INSTALL SUCCESS                [+]${NC}"
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "                                                       "
+    sleep 2
+    clear
+    return
 
-elif [ "$SELECT_THEME" -eq 3 ]; then
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                                   "
+  elif [ "$SELECT_THEME" = "3" ]; then
+    echo -e "                                                       "
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
+    echo -e "${BLUE}[+] =============================================== [+]${NC}"
+    echo -e "                                                                   "
 
     # Menanyakan informasi kepada pengguna untuk tema Enigma
     echo -e "${YELLOW}Masukkan link wa (https://wa.me...) : ${NC}"
@@ -193,31 +193,29 @@ elif [ "$SELECT_THEME" -eq 3 ]; then
     sudo sed -i "s|LINK_GROUP|$LINK_GROUP|g" /root/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
     sudo sed -i "s|LINK_CHNL|$LINK_CHNL|g" /root/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
     
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt install -y nodejs
+    sudo npm i -g yarn
+    cd /var/www/pterodactyl
+    yarn add react-feather
+    php artisan migrate
+    yarn build:production
+    php artisan view:clear
+    sudo rm theme.zip
+    sudo rm -rf /root/pterodactyl
 
-  sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-  sudo apt install -y nodejs
-  sudo npm i -g yarn
-  cd /var/www/pterodactyl
-  yarn add react-feather
-  php artisan migrate
-  yarn build:production
-  php artisan view:clear
-  sudo rm /root/C3.zip
-  sudo rm -rf /root/pterodactyl
-
-  echo -e "                                                       "
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e ""
-  sleep 5
-else
-  echo ""
-  echo "Pilihan tidak valid. silahkan pilih 1/2/3."
-fi
+    echo -e "                                                       "
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e ""
+    sleep 5
+  else
+    echo ""
+    echo "Pilihan tidak valid. silahkan pilih 1/2/3."
+  fi
 }
-
 
 # Uninstall theme
 uninstall_theme() {
@@ -226,7 +224,7 @@ uninstall_theme() {
   echo -e "${BLUE}[+]                    DELETE THEME                 [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
-  bash <(curl https://raw.githubusercontent.com/gitfdil1248/thema/main/repair.sh)
+  bash <(curl -s https://raw.githubusercontent.com/gitfdil1248/thema/main/repair.sh)
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "${GREEN}[+]                 DELETE THEME SUKSES             [+]${NC}"
@@ -235,79 +233,76 @@ uninstall_theme() {
   sleep 2
   clear
 }
+
 install_themeSteeler() {
-#!/bin/bash
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                                   "
 
-echo -e "                                                       "
-echo -e "${BLUE}[+] =============================================== [+]${NC}"
-echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-echo -e "${BLUE}[+] =============================================== [+]${NC}"
-echo -e "                                                                   "
+  # Unduh file tema
+  wget -O /root/C2.zip https://github.com/gitfdil1248/thema/raw/main/C2.zip
 
-# Unduh file tema
-wget -O /root/C2.zip https://github.com/gitfdil1248/thema/raw/main/C2.zip
+  # Ekstrak file tema
+  unzip /root/C2.zip -d /root/pterodactyl
 
-# Ekstrak file tema
-unzip /root/C2.zip -d /root/pterodactyl
+  # Salin tema ke direktori Pterodactyl
+  sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
 
-# Salin tema ke direktori Pterodactyl
-sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+  # Instal Node.js dan Yarn
+  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  sudo apt install -y nodejs
+  sudo npm i -g yarn
 
-# Instal Node.js dan Yarn
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-sudo apt install -y nodejs
-sudo npm i -g yarn
+  # Instal dependensi dan build tema
+  cd /var/www/pterodactyl
+  yarn add react-feather
+  php artisan migrate
+  yarn build:production
+  php artisan view:clear
 
-# Instal dependensi dan build tema
-cd /var/www/pterodactyl
-yarn add react-feather
-php artisan migrate
-yarn build:production
-php artisan view:clear
+  # Hapus file dan direktori sementara
+  sudo rm /root/C2.zip
+  sudo rm -rf /root/pterodactyl
 
-# Hapus file dan direktori sementara
-sudo rm /root/C2.zip
-sudo rm -rf /root/pterodactyl
-
-echo -e "                                                       "
-echo -e "${GREEN}[+] =============================================== [+]${NC}"
-echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-echo -e "${GREEN}[+] =============================================== [+]${NC}"
-echo -e ""
-sleep 2
-clear
-exit 0
-
+  echo -e "                                                       "
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e ""
+  sleep 2
+  clear
+  exit 0
 }
+
 create_node() {
   echo -e "                                                       "
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                    CREATE NODE                     [+]${NC}"
+  echo -e "${BLUE}[+]                    CREATE NODE                  [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
-  #!/bin/bash
-#!/bin/bash
+  
+  # Minta input dari pengguna
+  read -p "Masukkan nama lokasi: " location_name
+  read -p "Masukkan deskripsi lokasi: " location_description
+  read -p "Masukkan domain: " domain
+  read -p "Masukkan nama node: " node_name
+  read -p "Masukkan RAM (dalam MB): " ram
+  read -p "Masukkan jumlah maksimum disk space (dalam MB): " disk_space
+  read -p "Masukkan Locid: " locid
 
-# Minta input dari pengguna
-read -p "Masukkan nama lokasi: " location_name
-read -p "Masukkan deskripsi lokasi: " location_description
-read -p "Masukkan domain: " domain
-read -p "Masukkan nama node: " node_name
-read -p "Masukkan RAM (dalam MB): " ram
-read -p "Masukkan jumlah maksimum disk space (dalam MB): " disk_space
-read -p "Masukkan Locid: " locid
+  # Ubah ke direktori pterodactyl
+  cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
 
-# Ubah ke direktori pterodactyl
-cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
-
-# Membuat lokasi baru
-php artisan p:location:make <<EOF
+  # Membuat lokasi baru
+  php artisan p:location:make <<EOF
 $location_name
 $location_description
 EOF
 
-# Membuat node baru
-php artisan p:node:make <<EOF
+  # Membuat node baru
+  php artisan p:node:make <<EOF
 $node_name
 $location_description
 $locid
@@ -326,78 +321,95 @@ $disk_space
 /var/lib/pterodactyl/volumes
 EOF
 
+  # Mendapatkan ID node yang baru dibuat (node terakhir)
+  NODE_ID=$(php artisan p:node:list --format=json | jq -r '.[-1].id')
+  
+  if [ -z "$NODE_ID" ] || [ "$NODE_ID" = "null" ]; then
+    echo -e "${RED}Gagal mendapatkan ID node${NC}"
+    exit 1
+  fi
+
+  # Membuat configuration token untuk node
+  CONFIG_TOKEN=$(php artisan p:node:configuration $NODE_ID --format=json | jq -r '.token')
+  
+  if [ -z "$CONFIG_TOKEN" ] || [ "$CONFIG_TOKEN" = "null" ]; then
+    echo -e "${RED}Gagal membuat configuration token${NC}"
+    exit 1
+  fi
+
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]        CREATE NODE & LOCATION SUKSES             [+]${NC}"
+  echo -e "${GREEN}[+]        CREATE NODE & LOCATION SUKSES           [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
+  echo -e "${YELLOW}Configuration Token: $CONFIG_TOKEN${NC}"
+  echo -e "                                                       "
+  
   sleep 2
   clear
-  exit 0
+
+  # Otomatis menjalankan configure_wings dengan token yang didapat
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]           AUTO CONFIGURE WINGS                  [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+
+  # Menjalankan configure wings dengan token yang didapat
+  eval "$CONFIG_TOKEN"
+  
+  # Menjalankan perintah systemctl start wings
+  sudo systemctl start wings
+
+  echo -e "                                                       "
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "${GREEN}[+]            CONFIGURE WINGS SUKSES              [+]${NC}"
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  sleep 2
+  clear
 }
+
 uninstall_panel() {
   echo -e "                                                       "
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                    UNINSTALL PANEL                 [+]${NC}"
+  echo -e "${BLUE}[+]                    UNINSTALL PANEL              [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
 
-
-bash <(curl -s https://pterodactyl-installer.se) <<EOF
+  bash <(curl -s https://pterodactyl-installer.se) <<EOF
 y
 y
 y
 y
 EOF
 
-
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 UNINSTALL PANEL SUKSES             [+]${NC}"
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  sleep 2
-  clear
-  exit 0
-}
-configure_wings() {
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                    CONFIGURE WINGS                 [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  #!/bin/bash
-
-# Minta input token dari pengguna
-read -p "Masukkan token Configure menjalankan wings: " wings
-
-eval "$wings"
-# Menjalankan perintah systemctl start wings
-sudo systemctl start wings
-
-  echo -e "                                                       "
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 CONFIGURE WINGS SUKSES             [+]${NC}"
+  echo -e "${GREEN}[+]                 UNINSTALL PANEL SUKSES         [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
   clear
   exit 0
 }
+
 hackback_panel() {
   echo -e "                                                       "
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                    HACK BACK PANEL                 [+]${NC}"
+  echo -e "${BLUE}[+]                    HACK BACK PANEL              [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
+  
   # Minta input dari pengguna
-read -p "Masukkan Username Panel: " user
-read -p "password login " psswdhb
-  #!/bin/bash
-cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
+  read -p "Masukkan Username Panel: " user
+  read -p "password login " psswdhb
+  
+  cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
 
-# Membuat lokasi baru
-php artisan p:user:make <<EOF
+  # Membuat user baru
+  php artisan p:user:make <<EOF
 yes
 hackback@gmail.com
 $user
@@ -405,40 +417,44 @@ $user
 $user
 $psswdhb
 EOF
+
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 AKUN TELAH DI ADD             [+]${NC}"
+  echo -e "${GREEN}[+]                 AKUN TELAH DI ADD              [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
   
   exit 0
 }
+
 ubahpw_vps() {
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                    UBAH PASSWORD VPS       [+]${NC}"
+  echo -e "${GREEN}[+]                    UBAH PASSWORD VPS           [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
-read -p "Masukkan Pw Baru: " pw
-read -p "Masukkan Ulang Pw Baru " pw
+  
+  read -p "Masukkan Pw Baru: " pw
+  read -p "Masukkan Ulang Pw Baru: " pw_confirm
 
-passwd <<EOF
-$pw
-$pw
+  if [ "$pw" != "$pw_confirm" ]; then
+    echo -e "${RED}Password tidak cocok!${NC}"
+    exit 1
+  fi
 
-EOF
-
+  echo -e "root:$pw" | sudo chpasswd
 
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 GANTI PW VPS SUKSES         [+]${NC}"
+  echo -e "${GREEN}[+]                 GANTI PW VPS SUKSES            [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
   
   exit 0
 }
+
 # Main script
 display_welcome
 install_jq
@@ -485,22 +501,19 @@ while true; do
     2)
       uninstall_theme
       ;;
-      3)
-      configure_wings
-      ;;
-      4)
+    4)
       create_node
       ;;
-      5)
+    5)
       uninstall_panel
       ;;
-      6)
+    6)
       install_themeSteeler
       ;;
-      7)
+    7)
       hackback_panel
       ;;
-      8)
+    8)
       ubahpw_vps
       ;;
     x)
