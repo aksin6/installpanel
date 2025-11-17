@@ -7,13 +7,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
+# Variabel Direktori Pterodactyl
+PTERO_DIR="/var/www/pterodactyl"
+
 # Display welcome message
 display_welcome() {
   echo -e ""
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "${BLUE}[+]                                                 [+]${NC}"
   echo -e "${BLUE}[+]                AUTO INSTALLER THEMA             [+]${NC}"
-  echo -e "${BLUE}[+]                  © gudel023                [+]${NC}"
+  echo -e "${BLUE}[+]                  © gudel023                     [+]${NC}"
   echo -e "${BLUE}[+]                                                 [+]${NC}"
   echo -e "${RED}[+] =============================================== [+]${NC}"
   echo -e ""
@@ -28,7 +31,7 @@ display_welcome() {
   clear
 }
 
-#Update and install jq
+# Update and install jq
 install_jq() {
   echo -e "                                                       "
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
@@ -53,11 +56,11 @@ install_jq() {
   clear
 }
 
-#Check user token
+# Check user token
 check_token() {
   echo -e "                                                       "
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]               LICENSY gudel023            [+]${NC}"
+  echo -e "${BLUE}[+]               LICENSY gudel023                  [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   echo -e "${YELLOW}MASUKAN AKSES TOKEN :${NC}"
@@ -66,7 +69,8 @@ check_token() {
   if [ "$USER_TOKEN" = "gudel023" ]; then
     echo -e "${GREEN}AKSES BERHASIL${NC}"
   else
-    echo -e "${GREEN}Buy dulu Gih Ke gudel023${NC}"
+    echo -e "${RED}TOKEN TIDAK VALID!${NC}"
+    echo -e "${YELLOW}Buy dulu Gih Ke gudel023${NC}"
     echo -e "${YELLOW}TELEGRAM : @gudel023${NC}"
     echo -e "${YELLOW}WHATSAPP : 62882141700${NC}"
     echo -e "${YELLOW}HARGA TOKEN : 25K FREE UPDATE JIKA ADA TOKEN BARU${NC}"
@@ -76,8 +80,27 @@ check_token() {
   clear
 }
 
+# Deteksi direktori Pterodactyl
+detect_ptero_dir() {
+  if [ ! -d "$PTERO_DIR" ]; then
+    echo -e "${YELLOW}Direktori Pterodactyl Panel standar ($PTERO_DIR) tidak ditemukan.${NC}"
+    read -p "Masukkan direktori Pterodactyl Panel Anda (e.g., /var/www/pterodactyl): " CUSTOM_DIR
+    if [ -d "$CUSTOM_DIR" ]; then
+      PTERO_DIR="$CUSTOM_DIR"
+      echo -e "${GREEN}Menggunakan direktori: $PTERO_DIR${NC}"
+    else
+      echo -e "${RED}Direktori $CUSTOM_DIR tidak ditemukan. Skrip dihentikan.${NC}"
+      exit 1
+    fi
+  else
+    echo -e "${GREEN}Direktori Pterodactyl Panel terdeteksi: $PTERO_DIR${NC}"
+  fi
+  sleep 1
+}
+
 # Install theme
 install_theme() {
+  local THEME_URL
   while true; do
     echo -e "                                                       "
     echo -e "${BLUE}[+] =============================================== [+]${NC}"
@@ -113,74 +136,36 @@ install_theme() {
     esac
   done
   
+  # Hapus direktori sementara jika ada
   if [ -e /root/pterodactyl ]; then
     sudo rm -rf /root/pterodactyl
   fi
-  wget -q "$THEME_URL" -O theme.zip
-  sudo unzip -o theme.zip
   
-  if [ "$SELECT_THEME" = "1" ]; then
-    echo -e "                                                       "
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "                                                                   "
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-    sudo apt install -y nodejs
-    sudo npm i -g yarn
-    cd /var/www/pterodactyl
-    yarn add react-feather
-    php artisan migrate
-    yarn build:production
-    php artisan view:clear
-    sudo rm theme.zip
-    sudo rm -rf /root/pterodactyl
-
-    echo -e "                                                       "
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e ""
-    sleep 2
-    clear
-    exit 0
-
-  elif [ "$SELECT_THEME" = "2" ]; then
-    echo -e "                                                       "
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "                                                       "
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-    sudo apt install -y nodejs
-    npm i -g yarn
-    cd /var/www/pterodactyl
-    yarn add react-feather
-    php artisan migrate
-    yarn build:production
-    php artisan view:clear
-    sudo rm theme.zip
-    sudo rm -rf /root/pterodactyl
-
-    echo -e "                                                       "
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e "${GREEN}[+]                  INSTALL SUCCESS                [+]${NC}"
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e "                                                       "
-    sleep 2
-    clear
-    return
-
-  elif [ "$SELECT_THEME" = "3" ]; then
-    echo -e "                                                       "
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-    echo -e "${BLUE}[+] =============================================== [+]${NC}"
-    echo -e "                                                                   "
-
-    # Menanyakan informasi kepada pengguna untuk tema Enigma
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                                   "
+  
+  wget -q "$THEME_URL" -O /root/theme.zip
+  
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}Gagal mengunduh tema.${NC}"
+    sudo rm -f /root/theme.zip
+    return 1
+  fi
+  
+  sudo unzip -o /root/theme.zip -d /root/
+  
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}Gagal mengekstrak tema.${NC}"
+    sudo rm -f /root/theme.zip
+    sudo rm -rf /root/pterodactyl # Tambahkan cleanup untuk direktori jika ada
+    return 1
+  fi
+  
+  # Khusus tema Enigma (Opsi 3)
+  if [ "$SELECT_THEME" = "3" ]; then
     echo -e "${YELLOW}Masukkan link wa (https://wa.me...) : ${NC}"
     read LINK_WA
     echo -e "${YELLOW}Masukkan link group (https://.....) : ${NC}"
@@ -189,81 +174,31 @@ install_theme() {
     read LINK_CHNL
 
     # Mengganti placeholder dengan nilai dari pengguna
+    # Pastikan file yang diunduh sudah ada di /root/pterodactyl
     sudo sed -i "s|LINK_WA|$LINK_WA|g" /root/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
     sudo sed -i "s|LINK_GROUP|$LINK_GROUP|g" /root/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
     sudo sed -i "s|LINK_CHNL|$LINK_CHNL|g" /root/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx
-    
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-    sudo apt install -y nodejs
-    sudo npm i -g yarn
-    cd /var/www/pterodactyl
-    yarn add react-feather
-    php artisan migrate
-    yarn build:production
-    php artisan view:clear
-    sudo rm theme.zip
-    sudo rm -rf /root/pterodactyl
-
-    echo -e "                                                       "
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e ""
-    sleep 5
-  else
-    echo ""
-    echo "Pilihan tidak valid. silahkan pilih 1/2/3."
   fi
-}
-
-# Uninstall theme
-uninstall_theme() {
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                    DELETE THEME                 [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  bash <(curl -s https://raw.githubusercontent.com/gitfdil1248/thema/main/repair.sh)
-  echo -e "                                                       "
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 DELETE THEME SUKSES             [+]${NC}"
-  echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "                                                       "
-  sleep 2
-  clear
-}
-
-install_themeSteeler() {
-  echo -e "                                                       "
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "${BLUE}[+]                  INSTALLASI THEMA               [+]${NC}"
-  echo -e "${BLUE}[+] =============================================== [+]${NC}"
-  echo -e "                                                                   "
-
-  # Unduh file tema
-  wget -O /root/C2.zip https://github.com/gitfdil1248/thema/raw/main/C2.zip
-
-  # Ekstrak file tema
-  unzip /root/C2.zip -d /root/pterodactyl
-
+  
   # Salin tema ke direktori Pterodactyl
-  sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-
-  # Instal Node.js dan Yarn
+  sudo cp -rfT /root/pterodactyl "$PTERO_DIR"
+  
+  # Instalasi dependensi dan build (dipindahkan ke sini agar tidak berulang)
+  echo -e "${YELLOW}Menginstal dependensi Node.js dan Yarn...${NC}"
   curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
   sudo apt install -y nodejs
   sudo npm i -g yarn
-
-  # Instal dependensi dan build tema
-  cd /var/www/pterodactyl
+  
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; return 1; }
+  
+  echo -e "${YELLOW}Melakukan instalasi dependensi dan build...${NC}"
   yarn add react-feather
   php artisan migrate
   yarn build:production
   php artisan view:clear
-
-  # Hapus file dan direktori sementara
-  sudo rm /root/C2.zip
+  
+  # Cleanup
+  sudo rm -f /root/theme.zip
   sudo rm -rf /root/pterodactyl
 
   echo -e "                                                       "
@@ -273,7 +208,86 @@ install_themeSteeler() {
   echo -e ""
   sleep 2
   clear
-  exit 0
+}
+
+# Uninstall theme
+uninstall_theme() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                    DELETE THEME                 [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  # Pastikan direktori Pterodactyl sudah terdeteksi
+  if [ ! -d "$PTERO_DIR" ]; then
+      echo -e "${RED}Direktori Pterodactyl Panel tidak ditemukan di $PTERO_DIR.${NC}"
+      sleep 2
+      return
+  fi
+
+  bash <(curl -s https://raw.githubusercontent.com/gitfdil1248/thema/main/repair.sh) "$PTERO_DIR"
+  
+  if [ $? -eq 0 ]; then
+    echo -e "                                                       "
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "${GREEN}[+]                 DELETE THEME SUKSES             [+]${NC}"
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  else
+    echo -e "                                                       "
+    echo -e "${RED}[+] =============================================== [+]${NC}"
+    echo -e "${RED}[+]                 DELETE THEME GAGAL              [+]${NC}"
+    echo -e "${RED}[+] =============================================== [+]${NC}"
+  fi
+  echo -e "                                                       "
+  sleep 2
+  clear
+}
+
+# Fungsi ini dihapus/diganti karena redundant dengan opsi 1 di install_theme
+install_themeSteeler() {
+  echo -e "${YELLOW}Menggunakan fungsi Install theme (Opsi 1) untuk Stellar Theme...${NC}"
+  SELECT_THEME="1"
+  THEME_URL="https://github.com/gitfdil1248/thema/raw/main/C2.zip"
+
+  if [ -e /root/pterodactyl ]; then
+    sudo rm -rf /root/pterodactyl
+  fi
+
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                  INSTALLASI THEMA STELLER       [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                                   "
+  
+  wget -q "$THEME_URL" -O /root/theme.zip
+  sudo unzip -o /root/theme.zip -d /root/
+  
+  sudo cp -rfT /root/pterodactyl "$PTERO_DIR"
+  
+  # Instalasi dependensi dan build
+  echo -e "${YELLOW}Menginstal dependensi Node.js dan Yarn...${NC}"
+  curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  sudo apt install -y nodejs
+  sudo npm i -g yarn
+  
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; return 1; }
+
+  echo -e "${YELLOW}Melakukan instalasi dependensi dan build...${NC}"
+  yarn add react-feather
+  php artisan migrate
+  yarn build:production
+  php artisan view:clear
+  
+  # Hapus file dan direktori sementara
+  sudo rm -f /root/theme.zip
+  sudo rm -rf /root/pterodactyl
+
+  echo -e "                                                       "
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e ""
+  sleep 2
+  clear
 }
 
 create_node() {
@@ -293,15 +307,17 @@ create_node() {
   read -p "Masukkan Locid: " locid
 
   # Ubah ke direktori pterodactyl
-  cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
 
   # Membuat lokasi baru
+  echo -e "${YELLOW}Membuat lokasi baru...${NC}"
   php artisan p:location:make <<EOF
 $location_name
 $location_description
 EOF
 
   # Membuat node baru
+  echo -e "${YELLOW}Membuat node baru...${NC}"
   php artisan p:node:make <<EOF
 $node_name
 $location_description
@@ -356,6 +372,8 @@ EOF
   echo -e "                                                       "
 
   # Menjalankan configure wings dengan token yang didapat
+  # Perintah config wings biasanya merupakan perintah bash yang diawali 'bash <(curl -s ...)'
+  # Oleh karena itu, kita jalankan eval pada token yang didapat
   eval "$CONFIG_TOKEN"
   
   # Menjalankan perintah systemctl start wings
@@ -377,22 +395,25 @@ uninstall_panel() {
   echo -e "${BLUE}[+]                    UNINSTALL PANEL              [+]${NC}"
   echo -e "${BLUE}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
+  echo -e "${RED}PERINGATAN: Ini akan menghapus Pterodactyl Panel dan data terkait.${NC}"
+  read -p "Lanjutkan? (y/N): " confirm_uninstall
+  
+  if [[ "$confirm_uninstall" != "y" && "$confirm_uninstall" != "Y" ]]; then
+    echo -e "${YELLOW}Uninstall dibatalkan.${NC}"
+    sleep 1
+    return
+  fi
 
-  bash <(curl -s https://pterodactyl-installer.se) <<EOF
-y
-y
-y
-y
-EOF
-
+  # Menggunakan skrip uninstall Pterodactyl Installer
+  bash <(curl -s https://pterodactyl-installer.se/uninstall)
+  
   echo -e "                                                       "
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
-  echo -e "${GREEN}[+]                 UNINSTALL PANEL SUKSES         [+]${NC}"
+  echo -e "${GREEN}[+]                 UNINSTALL PANEL SELESAI        [+]${NC}"
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
   clear
-  exit 0
 }
 
 hackback_panel() {
@@ -403,17 +424,21 @@ hackback_panel() {
   echo -e "                                                       "
   
   # Minta input dari pengguna
+  read -p "Masukkan Email Panel: " email
+  read -p "Masukkan Username Panel (First Name): " user_first
+  read -p "Masukkan Username Panel (Last Name): " user_last
   read -p "Masukkan Username Panel: " user
-  read -p "password login " psswdhb
+  read -p "Masukkan password login: " psswdhb
   
-  cd /var/www/pterodactyl || { echo "Direktori tidak ditemukan"; exit 1; }
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
 
   # Membuat user baru
+  echo -e "${YELLOW}Membuat user administrator baru...${NC}"
   php artisan p:user:make <<EOF
 yes
-hackback@gmail.com
-$user
-$user
+$email
+$user_first
+$user_last
 $user
 $psswdhb
 EOF
@@ -424,8 +449,6 @@ EOF
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
-  
-  exit 0
 }
 
 ubahpw_vps() {
@@ -435,12 +458,14 @@ ubahpw_vps() {
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   
-  read -p "Masukkan Pw Baru: " pw
-  read -p "Masukkan Ulang Pw Baru: " pw_confirm
+  read -s -p "Masukkan Pw Baru: " pw
+  echo # newline
+  read -s -p "Masukkan Ulang Pw Baru: " pw_confirm
+  echo # newline
 
   if [ "$pw" != "$pw_confirm" ]; then
     echo -e "${RED}Password tidak cocok!${NC}"
-    exit 1
+    return 1
   fi
 
   echo -e "root:$pw" | sudo chpasswd
@@ -451,14 +476,198 @@ ubahpw_vps() {
   echo -e "${GREEN}[+] =============================================== [+]${NC}"
   echo -e "                                                       "
   sleep 2
+}
+
+# Configure Wings
+configure_wings() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                  CONFIGURE WINGS                [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
   
-  exit 0
+  read -p "Masukkan Configuration Token: " config_token
+  
+  # Menjalankan configure wings dengan token yang dimasukkan
+  eval "$config_token"
+  
+  # Restart wings service
+  sudo systemctl restart wings
+
+  echo -e "                                                       "
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "${GREEN}[+]            CONFIGURE WINGS SUKSES              [+]${NC}"
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  sleep 2
+  clear
+}
+
+# Create new nest
+create_nest() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                    CREATE NEST                  [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  # Minta input dari pengguna
+  read -p "Masukkan nama nest: " nest_name
+  read -p "Masukkan deskripsi nest: " nest_description
+  read -p "Masukkan author nest (e.g., Pterodactyl <support@pterodactyl.io>): " nest_author
+  
+  # Ubah ke direktori pterodactyl
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
+
+  # Membuat nest baru menggunakan artisan command
+  echo -e "${YELLOW}Membuat nest baru...${NC}"
+  php artisan p:nest:make <<EOF
+$nest_name
+$nest_description
+$nest_author
+EOF
+
+  # Dapatkan ID nest yang baru dibuat
+  NEST_ID=$(php artisan p:nest:list --format=json | jq -r '.[-1].id')
+  
+  if [ -z "$NEST_ID" ] || [ "$NEST_ID" = "null" ]; then
+    echo -e "${RED}Gagal mendapatkan ID nest${NC}"
+    exit 1
+  fi
+
+  echo -e "                                                       "
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "${GREEN}[+]                 CREATE NEST SUKSES             [+]${NC}"
+  echo -e "${GREEN}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  echo -e "${YELLOW}Nest ID: $NEST_ID${NC}"
+  echo -e "                                                       "
+  
+  sleep 2
+  clear
+  
+  # Tanya user apakah ingin langsung import egg
+  read -p "Apakah ingin import egg sekarang? (y/n): " import_choice
+  if [[ "$import_choice" = "y" || "$import_choice" = "Y" ]]; then
+    import_egg "$NEST_ID"
+  fi
+}
+
+# Import egg from external source
+import_egg() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                    IMPORT EGG                   [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  local nest_id
+  # Jika nest_id tidak diberikan sebagai parameter, minta input
+  if [ -z "$1" ]; then
+    read -p "Masukkan ID nest tujuan: " nest_id
+  else
+    nest_id="$1"
+    echo -e "${YELLOW}Menggunakan Nest ID: $nest_id${NC}"
+  fi
+  
+  read -p "Masukkan URL raw JSON egg (contoh: dari GitHub): " egg_url
+  
+  # Validasi URL
+  if [[ ! "$egg_url" =~ ^https?:// ]]; then
+    echo -e "${RED}URL tidak valid!${NC}"
+    return 1
+  fi
+
+  # Unduh file egg JSON
+  echo -e "${YELLOW}Mengunduh file egg...${NC}"
+  wget -q -O /tmp/egg.json "$egg_url"
+  
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}Gagal mengunduh file egg dari $egg_url${NC}"
+    return 1
+  fi
+
+  # Validasi file JSON
+  if ! jq empty /tmp/egg.json 2>/dev/null; then
+    echo -e "${RED}File egg bukan format JSON yang valid${NC}"
+    rm -f /tmp/egg.json
+    return 1
+  fi
+
+  # Ubah ke direktori pterodactyl
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
+
+  # Import egg menggunakan artisan command
+  echo -e "${YELLOW}Mengimpor egg...${NC}"
+  php artisan p:egg:import --nest="$nest_id" /tmp/egg.json
+
+  if [ $? -eq 0 ]; then
+    echo -e "                                                       "
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "${GREEN}[+]                 IMPORT EGG SUKSES              [+]${NC}"
+    echo -e "${GREEN}[+] =============================================== [+]${NC}"
+    echo -e "                                                       "
+  else
+    echo -e "                                                       "
+    echo -e "${RED}[+] =============================================== [+]${NC}"
+    echo -e "${RED}[+]                 IMPORT EGG GAGAL                [+]${NC}"
+    echo -e "${RED}[+] =============================================== [+]${NC}"
+    echo -e "                                                       "
+  fi
+
+  # Bersihkan file temporary
+  rm -f /tmp/egg.json
+  
+  sleep 2
+  clear
+}
+
+# List all nests
+list_nests() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                    LIST NESTS                   [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
+
+  # Menampilkan daftar nests dalam format JSON dan parsing dengan jq
+  echo -e "${YELLOW}Daftar Nests:${NC}"
+  php artisan p:nest:list --format=json | jq -r '.[] | "ID: \(.id) | Name: \(.name) | Author: \(.author) | Description: \(.description)"'
+  
+  echo -e "                                                       "
+  read -p "Tekan Enter untuk melanjutkan..." dummy
+  clear
+}
+
+# List eggs in a nest
+list_eggs() {
+  echo -e "                                                       "
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "${BLUE}[+]                    LIST EGGS                    [+]${NC}"
+  echo -e "${BLUE}[+] =============================================== [+]${NC}"
+  echo -e "                                                       "
+  
+  read -p "Masukkan ID nest: " nest_id
+  
+  cd "$PTERO_DIR" || { echo -e "${RED}Direktori Pterodactyl tidak ditemukan. Aborted.${NC}"; exit 1; }
+
+  # Menampilkan daftar eggs dalam nest tertentu
+  echo -e "${YELLOW}Daftar Eggs dalam Nest ID $nest_id:${NC}"
+  php artisan p:egg:list --nest="$nest_id" --format=json | jq -r '.[] | "ID: \(.id) | Name: \(.name) | Author: \(.author)"'
+  
+  echo -e "                                                       "
+  read -p "Tekan Enter untuk melanjutkan..." dummy
+  clear
 }
 
 # Main script
 display_welcome
 install_jq
 check_token
+detect_ptero_dir
 
 while true; do
   clear
@@ -480,17 +689,21 @@ while true; do
   echo -e "${BLUE}          ggg.                                            ${NC}"
   echo -e "${BLUE}             b.                                           ${NC}"
   echo -e "                                                                     "
-  echo -e "BERIKUT LIST INSTALL :"
+  echo -e "BERIKUT LIST INSTALL (Panel Dir: $PTERO_DIR):"
   echo "1. Install theme"
   echo "2. Uninstall theme"
   echo "3. Configure Wings"
   echo "4. Create Node"
-  echo "5. Uninstall Panel"
-  echo "6. Stellar Theme"
-  echo "7. Hack Back Panel"
+  echo "5. Uninstall Panel (Hapus Panel)"
+  echo "6. Stellar Theme (Sama dengan Opsi 1)"
+  echo "7. Hack Back Panel (Tambah Admin Baru)"
   echo "8. Ubah Pw Vps"
+  echo "9. Create Nest"
+  echo "10. Import Egg"
+  echo "11. List Nests"
+  echo "12. List Eggs"
   echo "x. Exit"
-  echo -e "Masukkan pilihan 1/2/x:"
+  echo -e "Masukkan pilihan 1-12/x:"
   read -r MENU_CHOICE
   clear
 
@@ -501,6 +714,9 @@ while true; do
     2)
       uninstall_theme
       ;;
+    3)
+      configure_wings
+      ;;
     4)
       create_node
       ;;
@@ -508,7 +724,7 @@ while true; do
       uninstall_panel
       ;;
     6)
-      install_themeSteeler
+      install_themeSteeler # Tetap panggil fungsi, tapi sudah diperbaiki
       ;;
     7)
       hackback_panel
@@ -516,12 +732,26 @@ while true; do
     8)
       ubahpw_vps
       ;;
+    9)
+      create_nest
+      ;;
+    10)
+      import_egg
+      ;;
+    11)
+      list_nests
+      ;;
+    12)
+      list_eggs
+      ;;
     x)
       echo "Keluar dari skrip."
       exit 0
       ;;
     *)
       echo "Pilihan tidak valid, silahkan coba lagi."
+      sleep 1
       ;;
   esac
 done
+
